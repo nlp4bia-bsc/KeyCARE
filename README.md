@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 #  BioTermCategorizer <img src="www/no_logo.png" alt="Logo" align="right"  width="200" height="200">
 
-Biomedical term extraction and classification
+Biomedical term extraction and classification.
 <p align="left">
     TO BE DEFINED
     <br />
