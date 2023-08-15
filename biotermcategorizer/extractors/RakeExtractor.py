@@ -11,6 +11,6 @@ class RakeExtractor(Extractor):
 
     def extract_terms(self, text):
         self.extractor.extract_keywords_from_text(text)
-        terms = self.extractor.get_ranked_phrases()
-        terms = [kw for kw in terms if (len(word_tokenize(kw)) <= self.max_tokens)]
+        terms = self.extractor.get_ranked_phrases_with_scores()
+        terms = [(kw,score) for score,kw in terms if (len(word_tokenize(kw, language=self.language)) <= self.max_tokens)]
         return terms

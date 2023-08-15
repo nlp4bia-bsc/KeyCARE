@@ -23,27 +23,31 @@ class Extractor:
     @staticmethod
     def find_term_span(text, terms):
         spans = []
-        for t in terms:
+        for t,score in terms:
           term = re.escape(t)
           patron = r'\b' + term + r'\b'
           coincidencias = re.finditer(patron, text, re.IGNORECASE)
-          span = [[coincidencia.start(), coincidencia.end()-1] for coincidencia in coincidencias]
-          spans.append((t,span))
+          span = [(t, coincidencia.start(), coincidencia.end()-1, score) for coincidencia in coincidencias]
+          spans.extend(span)
         return spans
 
     @staticmethod
     def rmv_overlaps(keywords):
       ent = [kw[0] for kw in keywords]
-      pos = [kw[1] for kw in keywords]
+      pos = [kw[1:3] for kw in keywords]
+      score = [kw[3:] for kw in keywords]
       updated_keywords = []
-      n = 0
+      repeated_words = []
       for i in range(len(ent)):
-        for j in range(len(pos[i])):
-          overlap = False
+        overlap = False
+        if pos[i] in repeated_words:
+          overlap = True
+        else:
+          repeated_words.append(pos[i])
           for k in range(len(ent)):
-            for l in range(len(pos[k])):
-              if ((pos[i][j][0] >= pos[k][l][0]) and (pos[i][j][1] <= pos[k][l][1]) and i!=k):
-                overlap = True
-          if (not overlap):
-            updated_keywords.append((ent[i],pos[i][j][0],pos[i][j][1]))
+            if (((pos[i][0] >= pos[k][0]) and (pos[i][1] < pos[k][1])) or ((pos[i][0] > pos[k][0]) and (pos[i][1] <= pos[k][1]))):
+              overlap = True
+        if (not overlap):
+          kw = (ent[i],pos[i][0],pos[i][1]) + score[i]
+          updated_keywords.append(kw)
       return updated_keywords

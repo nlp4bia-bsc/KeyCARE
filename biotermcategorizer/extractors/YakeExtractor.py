@@ -10,5 +10,5 @@ class YakeExtractor(Extractor):
 
     def extract_terms(self, text):
         keywords = self.extractor.extract_keywords(text)
-        terms = [kw for kw, score in keywords if (len(word_tokenize(kw)) <= self.max_tokens)]
+        terms = [(kw,score) for kw, score in keywords if (len(word_tokenize(kw)) <= self.max_tokens)]
         return terms

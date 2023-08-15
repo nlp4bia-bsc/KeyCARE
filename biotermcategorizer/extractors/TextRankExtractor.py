@@ -14,5 +14,5 @@ class TextRankExtractor(Extractor):
         terms = []
         for phrase in doc._.phrases:
           if (len(word_tokenize(phrase.text)) <= self.max_tokens):
-            terms.append(phrase.text)
+            terms.append((phrase.text, phrase.rank))
         return terms
