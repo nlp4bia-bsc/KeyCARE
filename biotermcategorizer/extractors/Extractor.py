@@ -1,3 +1,6 @@
+import os
+import re
+
 class Extractor:
     def __init__(self, language, max_tokens):
         """
