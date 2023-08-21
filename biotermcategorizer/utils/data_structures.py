@@ -1,5 +1,18 @@
 class Keyword:
     def __init__(self, text, method, ini, fin, score):
+        """
+        Initializes a Keyword object with the provided attributes.
+
+        Parameters:
+        text (str): The extracted keyword text.
+        method (str): The extraction method used to find the keyword.
+        ini (int): The starting index of the keyword in the input text.
+        fin (int): The ending index of the keyword in the input text.
+        score (float): The relevance score of the keyword.
+
+        Returns:
+        None
+        """
         self.text = text
         self.method = method
         self.score = score
@@ -7,12 +20,12 @@ class Keyword:
 
     def __repr__(self):
         """
-        A method to return a string representation of the Keyword object.
+        Returns a string representation of the Keyword object.
 
         Parameters:
-        - None
+        None
 
         Returns:
-        - A string representing the Keyword object.
+        str: A string representing the Keyword object.
         """
         return f"<Keyword(text='{self.text}', method='{self.method}', score='{self.score}', span='{self.span}')>"
