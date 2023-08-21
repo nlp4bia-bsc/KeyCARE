@@ -1,4 +1,5 @@
 import yake
+from nltk.tokenize import word_tokenize
 from .Extractor import Extractor
 
 class YakeExtractor(Extractor):
