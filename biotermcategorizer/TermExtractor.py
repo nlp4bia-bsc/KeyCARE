@@ -7,7 +7,7 @@ from extractors.TextRankExtractor import TextRankExtractor
 from utils.data_structures import Keyword
 
 class TermExtractor:
-    def __init__(self, extraction_methods=["rake"], language="spanish", max_tokens=3, join=False):
+    def __init__(self, extraction_methods=["textrank"], language="spanish", max_tokens=3, join=False):
         """
         Initializes a TermExtractor object with specified parameters.
 
