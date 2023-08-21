@@ -1,6 +1,7 @@
 import nltk
 nltk.download('stopwords')
 nltk.download('punkt')
+from nltk.tokenize import word_tokenize
 from rake_nltk import Rake
 from .Extractor import Extractor
 
