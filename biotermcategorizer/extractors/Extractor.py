@@ -1,5 +1,7 @@
 import os
 import re
+import nltk
+nltk.download('stopwords')
 
 class Extractor:
     def __init__(self, language, max_tokens):
@@ -62,15 +64,81 @@ class Extractor:
 
     def postprocess_terms(self, terms):
         """
-        Post-processes the extracted terms if needed.
+        Post-processes the extracted terms if needed by removing and modifying some terms in a specific order.
 
         Parameters:
         terms (list): List of extracted terms.
 
         Returns:
-        None
+        new_terms (list): List of extracted terms after postprocessing.
         """
-        pass
+        new_terms = self.rmv_meaningless(terms)
+        new_terms = self.rmv_stopwords(new_terms)
+        new_terms = self.rmv_stopwords(new_terms)
+        new_terms = self.rmv_nonalnum_characters(new_terms)
+        new_terms = self.rmv_nonalnum_characters(new_terms)
+        new_terms = self.rmv_meaningless(new_terms)
+        return new_terms
+
+    def rmv_meaningless(self, terms):
+        """
+        Removes meaningless terms from the list of terms (numbers, terms with just one character and stopwords).
+
+        Parameters:
+        terms (list): List of terms to be filtered.
+
+        Returns:
+        list: List of terms with meaningless terms removed.
+        """
+        self.stopwords = nltk.corpus.stopwords.words(self.language)
+        new_terms = [t for t in terms if (t[0] not in self.stopwords and len(t[0]) >= 2 and not t[0].isdigit())]
+        return new_terms
+
+    def rmv_stopwords(self, terms):
+        """
+        Removes stopwords at the start and end of terms from the list.
+
+        Parameters:
+        terms (list): List of terms to be filtered.
+
+        Returns:
+        list: List of terms with stopwords removed.
+        """
+        new_terms = terms
+        self.stopwords = nltk.corpus.stopwords.words(self.language)
+        for word in self.stopwords:
+            new_terms = [(t[0][(len(word)+1):], t[1] + len(word) + 1, t[2], t[3], t[4]) if (t[0].lower().startswith(word.lower() + " ")) else t for t in new_terms]
+            new_terms = [(t[0][:-(len(word)+1)], t[1], t[2] - len(word) - 1, t[3], t[4]) if (t[0].lower().endswith(" " + word.lower())) else t for t in new_terms]
+        return new_terms
+
+    def rmv_nonalnum_characters(self, terms):
+        """
+        Removes non-alphanumeric characters at the start and end of the terms.
+
+        Parameters:
+        terms (list): List of terms to be filtered.
+
+        Returns:
+        list: List of terms with non-alphanumeric characters removed.
+        """
+        new_terms = [(t[0][1:], t[1] + 1, t[2], t[3], t[4]) if not t[0][0].isalnum() else t for t in terms]
+        new_terms = [(t[0][:-1], t[1], t[2] - 1, t[3], t[4]) if not t[0][-1].isalnum() else t for t in new_terms]
+        return new_terms
+
+    def extract_terms_without_overlaps(self, text):
+        """
+        Extracts terms from the given text with their span and removing complete overlaps.
+
+        Parameters:
+        text (str): Input text for term extraction.
+
+        Returns:
+        list: List of extracted terms without overlaps.
+        """
+        terms_with_span = self.extract_terms_with_span(text)
+        terms_without_overlaps = self.rmv_overlaps(terms_with_span)
+        return terms_without_overlaps
+
 
     @staticmethod
     def find_term_span(text, terms):
