@@ -17,6 +17,7 @@ class Keyword:
         self.method = method
         self.score = score
         self.span = [ini, fin]
+        self.label = None
 
     def __repr__(self):
         """
@@ -28,4 +29,4 @@ class Keyword:
         Returns:
         str: A string representing the Keyword object.
         """
-        return f"<Keyword(text='{self.text}', method='{self.method}', score='{self.score}', span='{self.span}')>"
+        return f"<Keyword(text='{self.text}', method='{self.method}', score='{self.score}', span='{self.span}', class='{self.label}')>"
