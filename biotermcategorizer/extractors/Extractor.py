@@ -17,7 +17,6 @@ class Extractor:
         """
         self.language = language
         self.max_tokens = max_tokens
-        pass
 
     def extract_terms(self, text):
         """
