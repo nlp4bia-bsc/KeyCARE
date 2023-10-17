@@ -5,39 +5,34 @@ from datasets import Dataset
 from .Categorizer import Categorizer
 
 class SetFitClassifier(Categorizer):
-    def __init__(self, parents, n, threshold):
+    def __init__(self, n, threshold, model_path, output_path, classifier_model):
         """
-        Initializes the SetFitClassifier.
+        Initializes the SetFitClassifier class.
 
         Parameters:
-        parents (bool): Whether to use the SetFit model with parent or not.
-        n (int): The maximum number of predicted labels to consider.
-        threshold (float): The threshold for label filtering.
+        n (int): Maximum number of labels for a single mention.
+        threshold (float): Threshold for label prediction.
+        model_path (str): Path to the pretrained model (can be None).
+        output_path (str): Path to save the trained model.
+        classifier_model (str): Name of the classifier model.
+        """
+        super().__init__(n, threshold, model_path, output_path, classifier_model)
 
-        Returns:
-        None
+    def initialize_pretrained_model(self, model_path):
         """
-        self.parents = parents
-        self.n = n
-        self.threshold = threshold
-        self.model = self.initialize_pretrained_model()
-        self.labels = ['ACTIVIDAD', 'COMUNIDAD', 'DEPARTAMENTO', 'ENFERMEDAD', 'FAC_GEN','FAC_NOM', 'FARMACO', 'GEO_GEN', 'GEO_NOM', 'GPE_GEN', 'GPE_NOM','HUMAN', 'IDIOMA', 'MORFOLOGIA_NEOPLASIA', 'NO_CATEGORY','PROCEDIMIENTO', 'PROFESION', 'SINTOMA', 'SITUACION_LABORAL','SPECIES', 'TRANSPORTE']
-        
-    def initialize_pretrained_model(self):
-        """
-        Initializes and returns a pretrained and finetuned model based on the 'parents' flag.
+        Initializes and returns a pretrained and finetuned model (default or specified).
 
         Parameters:
-        None
+        model_path (str): Path to the pretrained model (can be None).
 
         Returns:
         SetFitModel: The pretrained model.
         """
-        if self.parents:
-            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/parents_sp'
+        if model_path is None:
+            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/SetFit/noparents_sp'
+            model = SetFitModel.from_pretrained(path)
         else:
-            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/noparents_sp'
-        model = SetFitModel.from_pretrained(path)
+            model = SetFitModel.from_pretrained(model_path)
         return model
 
     def compute_predictions(self, mention):
@@ -50,70 +45,63 @@ class SetFitClassifier(Categorizer):
         Returns:
         list: List of filtered labels considering the given threshold and the maximum labels.
         """
-        embeddings = self.model.model_body.encode([mention], normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
+        embeddings = self.model.model_body.encode([mention], normalize_embeddings=self.model.normalize_embeddings, convert_to tensor=True)
         predicts = self.model.model_head.predict_proba(embeddings)
         predscores = {self.labels[i]: arr[:,1].tolist()[0] for i, arr in enumerate(predicts)}
         top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
         filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
         return filtered_labels
 
-    def initialize_model_body(self):
+    def initialize_model_body(self, trainY):
+        self.model = SetFitModel.from pretrained(self.classifier_model, multi_target_strategy="multi-output")
+
+    def train_evaluate(self, trainX, trainY, testX, testY, mcm, classification_report, **kwargs):
         """
-        Initializes the model body without finetuning based on the 'parents' flag.
+        Trains and evaluates the SetFit model on the provided data.
 
         Parameters:
-        None
+        trainX (list): List of training data (mentions).
+        trainY (list): List of training labels.
+        testX (list): List of test data (mentions).
+        testY (list): List of test labels.
+        mcm (bool): Whether to create a multi-label confusion matrix heatmap.
+        classification_report (bool): Whether to display a classification report.
+        **kwargs: Additional arguments for training.
 
-        Returns:
-        SetFitModel: The initialized model.
+        Prints:
+        - A warning message for specified parameters that cannot be changed when that is attempted.
         """
-        if self.parents:
-            path = '/mnt/c/Users/Sergi/Desktop/BSC/spanish_sapbert_models/sapbert_15_parents_1epoch'
-        else:
-            path = '/mnt/c/Users/Sergi/Desktop/BSC/spanish_sapbert_models/sapbert_15_noparents_1epoch'
-        model = SetFitModel.from_pretrained(path, multi_target_strategy="multi-output")
-        return model
-
-    def train_evaluate(self, trainset, testset, mcm, classification_report):
-        """
-        Trains and evaluates the model using provided datasets and metrics.
-
-        Parameters:
-        trainset (DataFrame): DataFrame containing training data. Must have a column called "text" for the mention and a column called "label" with the class.
-        testset (DataFrame): DataFrame containing test data. Must have a column called "text" for the mention and a column called "label" with the class.
-        mcm (bool): Whether to produce the heatmap of the multilabel confusion matrix during evaluation.
-        classification_report (bool): Whether to show the classification report during evaluation.
-
-        Returns:
-        dict: Dictionary containing evaluation metrics.
-        """
-        train_dataset, test_dataset = self.prepare_data(trainset, testset)
+        train_dataset, test_dataset = self.prepare_data(trainX, trainY, testX, testY)
         evaluate_with_params = self.lambda_evaluate_model(mcm, classification_report)
-        trainer = SetFitTrainer(model=self.model, train_dataset=train_dataset, eval_dataset=test_dataset, metric=evaluate_with_params, num_iterations=5)
+        specified_params = ['metric', 'num_iterations']
+        for param in specified_params:
+            if param in kwargs:
+                del kwargs[param]
+                print("Warning. The parameter " + param + " cannot be changed from its given value.")
+        trainer = SetFitTrainer(model=self.model, train_dataset=train_dataset, eval_dataset=test_dataset, metric=evaluate_with_params, num_iterations=5, **kwargs)
         trainer.train()
         metrics = trainer.evaluate()
+        self.model.save_pretrained(self.output_path)
         return metrics
 
-    def prepare_data(self, trainset, testset):
+    def prepare_data(self, trainX, trainY, testX, testY):
         """
-        Prepares training and test datasets for model training and evaluation.
+        Prepares training and test datasets for SetFit model training.
 
         Parameters:
-        trainset (DataFrame): DataFrame containing training data. Must have a column called "text" for the mention and a column called "label" with the class.
-        testset (DataFrame): DataFrame containing test data. Must have a column called "text" for the mention and a column called "label" with the class.
-        
+        trainX (list): List of training data (mentions).
+        trainY (list): List of training labels.
+        testX (list): List of test data (mentions).
+        testY (list): List of test labels.
+
         Returns:
-        tuple: Tuple containing train and test datasets.
+        Tuple: Tuple containing training and test datasets.
         """
-        trainY=[]
-        testY=[]
-        for index, row in trainset.iterrows():
-            trainY.append({row["label"]})
-        for index, row in testset.iterrows():
-            testY.append({row["label"]})
+        trainY = [{i} for i in trainY]
+        testY = [{i} for i in testY]
         mlb = MultiLabelBinarizer()
         mlb.fit_transform(trainY)
         self.labels = [i for i in mlb.classes_]
-        train_dataset = Dataset.from_dict({"text": trainset['text'], "label": mlb.fit_transform(trainY)})
-        test_dataset = Dataset.from_dict({"text": testset['text'], "label": mlb.fit_transform(testY)})
+        train_dataset = Dataset.from_dict({"text": trainX, "label": mlb.fit_transform(trainY)})
+        test_dataset = Dataset.from_dict({"text": testX, "label": mlb.transform(testY)})
         return train_dataset, test_dataset

@@ -1,3 +1,4 @@
+accelerate==0.20.3
 aiohttp==3.8.5
 aiosignal==1.3.1
 annotated-types==0.5.0
@@ -67,12 +68,16 @@ jupyter_server_terminals==0.4.4
 jupyterlab==4.0.3
 jupyterlab-pygments==0.2.2
 jupyterlab_server==2.24.0
+keybert==0.7.0
+keyphrase-vectorizers==0.0.11
 kiwisolver==1.4.4
 langcodes==3.3.0
 lit==16.0.6
+markdown-it-py==3.0.0
 MarkupSafe==2.1.3
 matplotlib==3.7.2
 matplotlib-inline==0.1.6
+mdurl==0.1.2
 mistune==3.0.1
 mpmath==1.3.0
 multidict==6.0.4
@@ -133,6 +138,7 @@ requests==2.31.0
 responses==0.18.0
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
+rich==13.5.3
 rpds-py==0.9.2
 safetensors==0.3.3
 scikit-learn==1.3.0
@@ -147,8 +153,10 @@ smart-open==6.3.0
 sniffio==1.3.0
 soupsieve==2.4.1
 spacy==3.6.1
+spacy-alignments==0.9.1
 spacy-legacy==3.0.12
 spacy-loggers==1.0.4
+spacy-transformers==1.3.2
 srsly==2.4.7
 stack-data==0.6.2
 sympy==1.12

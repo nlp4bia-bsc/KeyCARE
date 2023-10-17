@@ -47,16 +47,18 @@ class Extractor:
         terms_with_span = self.find_term_span(text, terms)
         return terms_with_span
 
-    def extract_terms_without_overlaps(self, text):
+    def extract_terms_without_overlaps(self, text, kwargs):
         """
         Extracts terms from the given text with their span and removing complete overlaps.
 
         Parameters:
         text (str): Input text for term extraction.
+        **kwargs: Additional arguments for training. If some of the kwargs for the extraction do not exist, they will be ignored.
 
         Returns:
         list: List of extracted terms without overlaps.
         """
+        self.kwargs = kwargs
         terms_with_span = self.extract_terms_with_span(text)
         terms_without_overlaps = self.rmv_overlaps(terms_with_span)
         return terms_without_overlaps
@@ -123,21 +125,6 @@ class Extractor:
         new_terms = [(t[0][1:], t[1] + 1, t[2], t[3], t[4]) if not t[0][0].isalnum() else t for t in terms]
         new_terms = [(t[0][:-1], t[1], t[2] - 1, t[3], t[4]) if not t[0][-1].isalnum() else t for t in new_terms]
         return new_terms
-
-    def extract_terms_without_overlaps(self, text):
-        """
-        Extracts terms from the given text with their span and removing complete overlaps.
-
-        Parameters:
-        text (str): Input text for term extraction.
-
-        Returns:
-        list: List of extracted terms without overlaps.
-        """
-        terms_with_span = self.extract_terms_with_span(text)
-        terms_without_overlaps = self.rmv_overlaps(terms_with_span)
-        return terms_without_overlaps
-
 
     @staticmethod
     def find_term_span(text, terms):
