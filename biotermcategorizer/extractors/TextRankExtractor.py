@@ -11,9 +11,6 @@ class TextRankExtractor(Extractor):
         Parameters:
         language (str): Language for text processing.
         max_tokens (int): Maximum number of tokens for extracted terms.
-
-        Returns:
-        None
         """
         super().__init__(language, max_tokens)
         if language == 'spanish':
@@ -32,9 +29,10 @@ class TextRankExtractor(Extractor):
         Returns:
         list: List of extracted terms with scores/ranks.
         """
-        doc = self.extractor(text)
+        filtered_kwargs = {key: value for key, value in self.kwargs.items() if key in self.extractor.__call__.__code__.co_varnames}
+        doc = self.extractor(text, **filtered_kwargs)
         terms = []
         for phrase in doc._.phrases:
-            if (len(word_tokenize(phrase.text)) <= self.max_tokens):
-                terms.append((phrase.text, phrase.rank))
+          if (len(word_tokenize(phrase.text)) <= self.max_tokens):
+            terms.append((phrase.text, phrase.rank))
         return terms

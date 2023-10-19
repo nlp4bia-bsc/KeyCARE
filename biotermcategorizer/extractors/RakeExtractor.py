@@ -8,7 +8,7 @@ from .Extractor import Extractor
 class RakeExtractor(Extractor):
     def __init__(self, language, max_tokens):
         """
-        Initializes a RakeExtractor object with specified parameters.
+        Initializes a RakeExtractor object with specified parameters and the Rake object itself.
 
         Parameters:
         language (str): Language for text processing.
@@ -31,7 +31,8 @@ class RakeExtractor(Extractor):
         Returns:
         list: List of extracted terms with scores.
         """
-        self.extractor.extract_keywords_from_text(text)
+        filtered_kwargs = {key: value for key, value in self.kwargs.items() if key in self.extractor.extract_keywords_from_text.__code__.co_varnames}
+        self.extractor.extract_keywords_from_text(text, **filtered_kwargs)
         terms = self.extractor.get_ranked_phrases_with_scores()
-        terms = [(kw, score) for score, kw in terms if (len(word_tokenize(kw, language=self.language)) <= self.max_tokens)]
+        terms = [(kw,score) for score,kw in terms if (len(word_tokenize(kw, language=self.language)) <= self.max_tokens)]
         return terms
