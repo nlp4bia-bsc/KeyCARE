@@ -55,7 +55,7 @@ class TransformersClassifier(Categorizer):
         logits = output.logits
         predscores = {label: score for label, score in zip(self.labels, logits.tolist()[0])}
         top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
-        filtered_labels = [label for label in top_n_labels if predscores[label] > self threshold]
+        filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
         return filtered_labels
     
     def initialize_model_body(self, trainY):
