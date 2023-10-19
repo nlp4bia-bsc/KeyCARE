@@ -15,6 +15,8 @@ class TermExtractor:
                  categorizer_method="setfit", 
                  language="spanish", 
                  max_tokens=3, 
+                 pos=False,
+                 pos_pattern="<NOUN.*>*<ADP.*>*<NOUN.*>*<ADJ.*>*|<PROPN.*>+|<VERB.*>+", #CANVIAR PER EL BO DE VERITAT
                  join=False, 
                  postprocess=True,
                  n=1, 
@@ -35,6 +37,8 @@ class TermExtractor:
         categorizer_method (str): Method for text categorization.
         language (str): Language for text processing.
         max_tokens (int): Maximum number of tokens for keyword extraction.
+        pos (bool): Wether to use Part of Speech sequences in KeyBert.
+        pos_pattern (str): The Part of Speech regex pattern.
         join (bool): Whether to join keywords from different methods and remove overlaps among them.
         postprocess (bool): Whether to apply postprocessing to keywords.
         n (int): Maximum number of labels for a single sample.
@@ -48,7 +52,7 @@ class TermExtractor:
         **kwargs: Additional keyword arguments.
         """
         self.extraction_methods = extraction_methods
-        self.extractors = self.initialize_keyword_extractors(language, max_tokens)
+        self.extractors = self.initialize_keyword_extractors(language, max_tokens, pos, pos_pattern)
         self.categorizer_method = categorizer_method
         self.categorizer = self.initialize_categorizers(n, thr_setfit, thr_transformers, n_clusters, categorizer_model_path, output_path, clustering_model, classifier_model)
         self.join = join
@@ -68,13 +72,15 @@ class TermExtractor:
         self.extract_terms(text, self.join, self.postprocess)
         self.categorize_terms()
 
-    def initialize_keyword_extractors(self, language, max_tokens):
+    def initialize_keyword_extractors(self, language, max_tokens, pos, pos_pattern):
         """
         Initializes keyword extractors based on selected extraction methods.
 
         Parameters:
         language (str): Language for text processing.
         max_tokens (int): Maximum number of tokens for extracted terms.
+        pos (bool): Wether to use Part of Speech sequences in KeyBert.
+        pos_pattern (str): The Part of Speech regex pattern.
 
         Returns:
         dict: Dictionary containing initialized keyword extractors.
@@ -91,7 +97,7 @@ class TermExtractor:
             keyword_extractors["textrank"] = TextRankExtractor(language, max_tokens)
 
         if 'keybert' in self.extraction_methods:
-            keyword_extractors["keybert"] = KeyBertExtractor(language, max_tokens)
+            keyword_extractors["keybert"] = KeyBertExtractor(language, max_tokens, pos, pos_pattern)
 
         if not keyword_extractors:
             raise ValueError("No extraction method called {}".format(self.extraction_methods))
