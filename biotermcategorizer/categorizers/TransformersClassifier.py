@@ -170,7 +170,7 @@ class TransformersClassifier(Categorizer):
         """
         results = self.trainer.predict(testset)
         max_indices = np.argmax(results.predictions, axis=1)
-        preds = np.zeros like(results.predictions)
+        preds = np.zeros_like(results.predictions)
         preds[np.arange(len(max_indices)), max_indices] = 1
         metrics = self.evaluate_model(preds, results.label_ids, mcm, classification_report)
         print(metrics)
@@ -186,7 +186,7 @@ class TransformersClassifier(Categorizer):
         dict: Dictionary containing the batched input_ids, attention_mask, and labels.
         """
         return {
-            'input_ids': torch.stack([item[0] for item in batch]),
-            'attention_mask': torch.stack([item[1] for item in batch]),
-            'labels': torch.stack([item[2] for item in batch])
+        'input_ids': torch.stack([item[0] for item in batch]),
+        'attention_mask': torch.stack([item[1] for item in batch]),
+        'labels': torch.stack([item[2] for item in batch])
         }
