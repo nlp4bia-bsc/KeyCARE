@@ -113,8 +113,8 @@ class Categorizer:
         y_pred_with_predictions = y_pred[samples_with_predictions]
         y_test_with_predictions = y_test[samples_with_predictions]
 
-        confusion_matrix_multi = confusion_matrix(y_test_with_predictions.argmax(axis=1), y_pred_with_predictions.argmax(axis=1), labels=np.arange(len(self.labels))
-
+        confusion_matrix_multi = confusion_matrix(y_test_with_predictions.argmax(axis=1), y_pred_with_predictions.argmax(axis=1), labels=np.arange(len(self.labels)))
+    
         plt.figure(figsize=(10, 7))
         plt.imshow(confusion_matrix_multi, interpolation="nearest", cmap=plt.cm.Blues)
         plt.title("Multi-Label Confusion Matrix")
