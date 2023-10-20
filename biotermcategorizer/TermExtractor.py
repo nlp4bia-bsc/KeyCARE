@@ -4,10 +4,11 @@ from nltk.tokenize import word_tokenize
 from extractors.RakeExtractor import RakeExtractor
 from extractors.YakeExtractor import YakeExtractor
 from extractors.TextRankExtractor import TextRankExtractor
+from extractors.KeyBertExtractor import KeyBertExtractor
 from utils.data_structures import Keyword
 from categorizers.Clustering import Clustering
 from categorizers.SetFitClassifier import SetFitClassifier
-from categorizers.StandardClassifier import StandardClassifier
+from categorizers.TransformersClassifier import TransformersClassifier
 
 class TermExtractor:
     def __init__(self,
