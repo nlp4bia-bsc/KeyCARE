@@ -3,6 +3,7 @@ import numpy as np
 from transformers import AutoTokenizer, AutoModel
 import torch
 import pickle
+from .Categorizer import Categorizer
 
 class Clustering(Categorizer):
     def __init__(self, n_clusters, model_path, output_path, clustering_model):
