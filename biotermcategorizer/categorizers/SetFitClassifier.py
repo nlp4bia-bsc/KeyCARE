@@ -53,7 +53,7 @@ class SetFitClassifier(Categorizer):
         return filtered_labels
 
     def initialize_model_body(self, trainY):
-        self.model = SetFitModel.from pretrained(self.classifier_model, multi_target_strategy="multi-output")
+        self.model = SetFitModel.from_pretrained(self.classifier_model, multi_target_strategy="multi-output")
 
     def train_evaluate(self, trainX, trainY, testX, testY, mcm, classification_report, **kwargs):
         """
