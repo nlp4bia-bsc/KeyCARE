@@ -45,7 +45,7 @@ class SetFitClassifier(Categorizer):
         Returns:
         list: List of filtered labels considering the given threshold and the maximum labels.
         """
-        embeddings = self.model.model_body.encode([mention], normalize_embeddings=self.model.normalize_embeddings, convert_to tensor=True)
+        embeddings = self.model.model_body.encode([mention], normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
         predicts = self.model.model_head.predict_proba(embeddings)
         predscores = {self.labels[i]: arr[:,1].tolist()[0] for i, arr in enumerate(predicts)}
         top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
