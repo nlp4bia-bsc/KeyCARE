@@ -77,7 +77,7 @@ class Categorizer:
         no_label_samples = []
         for idx, pred in enumerate(y_pred):
             if np.all(pred == 0):
-                true labels = [self.labels[i] for i, value in enumerate(y_test[idx]) if value == 1]
+                true_labels = [self.labels[i] for i, value in enumerate(y_test[idx]) if value == 1]
                 no_label_samples.extend(true_labels)
 
         label_counts = Counter(no_label_samples)
