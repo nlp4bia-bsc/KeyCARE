@@ -13,7 +13,7 @@ from categorizers.TransformersClassifier import TransformersClassifier
 class TermExtractor:
     def __init__(self,
                  extraction_methods=["textrank"], 
-                 categorizer_method="setfit", 
+                 categorization_method="setfit", 
                  language="spanish", 
                  max_tokens=3, 
                  pos=False,
@@ -35,10 +35,10 @@ class TermExtractor:
 
         Parameters:
         extraction_methods (list): List of keyword extraction methods.
-        categorizer_method (str): Method for text categorization.
+        categorization_method (str): Method for text categorization.
         language (str): Language for text processing.
         max_tokens (int): Maximum number of tokens for keyword extraction.
-        pos (bool): Wether to use Part of Speech sequences in KeyBert.
+        pos (bool): Whether to use Part of Speech sequences in KeyBert.
         pos_pattern (str): The Part of Speech regex pattern.
         join (bool): Whether to join keywords from different methods and remove overlaps among them.
         postprocess (bool): Whether to apply postprocessing to keywords.
@@ -54,11 +54,12 @@ class TermExtractor:
         """
         self.extraction_methods = extraction_methods
         self.extractors = self.initialize_keyword_extractors(language, max_tokens, pos, pos_pattern)
-        self.categorizer_method = categorizer_method
+        self.categorization_method = categorization_method
         self.categorizer = self.initialize_categorizers(n, thr_setfit, thr_transformers, n_clusters, categorizer_model_path, output_path, clustering_model, classifier_model)
         self.join = join
         self.postprocess = postprocess
         self.kwargs = kwargs
+        self.keywords = None
     
     def __call__(self, text):
         """
@@ -149,18 +150,18 @@ class TermExtractor:
         Returns:
         Categorizer: Initialized categorizer object.
         """
-        if 'transformers' == self.categorizer_method:
+        if 'transformers' == self.categorization_method:
             categorizer = TransformersClassifier(n, thr_transformers, model_path, output_path, classifier_model)
             
-        elif 'setfit' == self.categorizer_method:
+        elif 'setfit' == self.categorization_method:
             categorizer = SetFitClassifier(n, thr_setfit, model_path, output_path, classifier_model)
 
-        elif 'clustering' == self.categorizer_method:
+        elif 'clustering' == self.categorization_method:
             if n_clusters is None:
                 raise TypeError("TermExtractor.__init__() missing 1 required positional argument: 'n_clusters' when selecting the Clustering algorithm")
             categorizer = Clustering(n_clusters, model_path, output_path, clustering_model)
         else:
-            raise ValueError("No categorizer method called {}".format(self.categorizer_method))
+            raise ValueError("No categorizer method called {}".format(self.categorization_method))
         return categorizer
 
     def categorize_terms(self):
@@ -168,16 +169,16 @@ class TermExtractor:
         Categorizes the extracted terms (keyword objects) using the selected categorizer method.
         """
         try:
-            if self.categorizer_method == 'clustering':
+            if self.categorization_method == 'clustering':
                 list_of_keywords = [kw.text for kw in self.keywords]
                 clusters = self.categorizer.predict_clusters(list_of_keywords)
                 for kw in self.keywords:
                     kw.label = clusters[kw.text]
-                    kw.categorization_method = self.categorizer_method
+                    kw.categorization_method = self.categorization_method
             else:
                 for kw in self.keywords:
                     kw.label = self.categorizer.compute_predictions(kw.text)
-                    kw.categorization_method = self.categorizer_method
+                    kw.categorization_method = self.categorization_method
         except:
             raise AttributeError("A categorizer method must be provided")
 
