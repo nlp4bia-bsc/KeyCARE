@@ -3,6 +3,7 @@ import torch
 import pandas as pd
 from datasets import Dataset
 from .Categorizer import Categorizer
+from sklearn.preprocessing import MultiLabelBinarizer
 
 class SetFitClassifier(Categorizer):
     def __init__(self, n, threshold, model_path, output_path, classifier_model):
