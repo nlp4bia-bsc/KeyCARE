@@ -25,3 +25,13 @@ class Keyword:
         str: A string representing the Keyword object.
         """
         return f"<Keyword(text='{self.text}', span='{self.span}', extraction method='{self.extraction_method}', score='{self.score}', categorization method='{self.categorization_method}', class='{self.label}')>"
+
+
+class Relation:
+    def __init__(self, source, target, rel_type):
+        self.source = source
+        self.target = target
+        self.rel_type = rel_type
+
+    def __repr__(self):
+        return f"<Relation(source mention='{self.source}', target mention='{self.target}', relation type='{self.rel_type}')>"
