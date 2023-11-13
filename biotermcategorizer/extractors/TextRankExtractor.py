@@ -1,5 +1,4 @@
 import spacy
-import pytextrank
 from nltk.tokenize import word_tokenize
 from .Extractor import Extractor
 
