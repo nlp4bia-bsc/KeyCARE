@@ -25,21 +25,35 @@ class RelExtractor:
         return rel_extractor
     
     def __call__(self, source, target):
-        if (type(source)==Keyword and type(target)==Keyword):
+        if (type(source)==Keyword):
             source = [source]
-            target = [target]
-        elif (type(source)==str and type(target)==str):
+        elif (type(source)==str):
             source = [Keyword(text=source)]
-            target = [Keyword(text=target)]
-        elif (type(source)==list and type(target)==list):
-            if (all(isinstance(element, str) for element in source) and all(isinstance(element, str) for element in target)):
+        elif (type(source)==list):
+            if (all(isinstance(element, str) for element in source)):
                 source = [Keyword(text=i) for i in source]
-                target = [Keyword(text=j) for j in target]
-            elif not (all(isinstance(element, Keyword) for element in source) and all(isinstance(element, Keyword) for element in target)):
-                raise TypeError('Source and target contain elements other than strings or Keyword class objects')
+            elif not (all(isinstance(element, Keyword) for element in source)):
+                raise TypeError('Source contains elements other than strings or Keyword class objects')
         else:
-            raise TypeError('Source and target must be strings, Keyword class objects, lists of strings or lists of Keyword class objects')
-        if (len(source) != len(target)):
-            raise TypeError('The same number of source and target mentions must be provided')
+            raise TypeError('Source must be a string, a Keyword class object, a list of strings or a list of Keyword class objects')
+
+        if (type(target)==Keyword):
+            target = [target]
+        elif (type(target)==str):
+            target = [Keyword(text=target)]
+        elif (type(target)==list):
+            if (all(isinstance(element, str) for element in target)):
+                target = [Keyword(text=i) for i in target]
+            elif not (all(isinstance(element, Keyword) for element in target)):
+                raise TypeError('Target contains elements other than strings or Keyword class objects')
         else:
+            raise TypeError('Target must be a string, a Keyword class object, a list of strings or a list of Keyword class objects')
+
+        if (len(source) == len(target)):
             self.relations = [Relation(source[i],target[i],self.rel_extractor.compute_relation(source[i].text, target[i].text)) for i in range(len(source))]
+        elif (len(source)==1):
+            self.relations = [Relation(source[0],target[i],self.rel_extractor.compute_relation(source[0].text, target[i].text)) for i in range(len(target))]
+        elif (len(target)==1):
+            self.relations = [Relation(source[i],target[0],self.rel_extractor.compute_relation(source[i].text, target[0].text)) for i in range(len(source))]
+        else:
+            raise TypeError('Source and target must be the same length or at least one of them has to be length 1.')
