@@ -143,7 +143,7 @@ class Extractor:
             term = re.escape(t)
             patron = r'\b' + term + r'\b'
             coincidencias = re.finditer(patron, text, re.IGNORECASE)
-            span = [(t, coincidencia.start(), coincidencia.end() - 1, score) for coincidencia in coincidencias]
+            span = [(t, coincidencia.start(), coincidencia.end(), score) for coincidencia in coincidencias]
             spans.extend(span)
         return spans
 

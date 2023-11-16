@@ -1,4 +1,4 @@
-import spacy
+import spacy, pytextrank
 from nltk.tokenize import word_tokenize
 from .Extractor import Extractor
 
