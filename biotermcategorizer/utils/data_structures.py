@@ -30,10 +30,11 @@ class Keyword:
 
 
 class Relation:
-    def __init__(self, source, target, rel_type):
+    def __init__(self, source, target, rel_type, relation_method):
         self.source = source
         self.target = target
         self.rel_type = rel_type
+        self.relation_method = relation_method
 
     def __repr__(self):
-        return f"<Relation(source mention='{self.source.text}', target mention='{self.target.text}', relation type='{self.rel_type}')>"
+        return f"<Relation(source mention='{self.source.text}', target mention='{self.target.text}', relation type='{self.rel_type}', relation method='{self.relation_method}')>"
