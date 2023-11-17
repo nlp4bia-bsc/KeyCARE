@@ -10,9 +10,11 @@ class RelExtractor:
                  n=1,
                  thr_transformers=0,
                  thr_setfit=0.5,
+                 all_combinations=False,
                  model_path=None,
                 ):
         self.relation_method=relation_method
+        self.all_combinations = all_combinations
         self.rel_extractor = self.initialize_relation_method(language, n, thr_transformers, thr_setfit, model_path)
         
     def initialize_relation_method(self, language, n, thr_transformers, thr_setfit, model_path):
@@ -49,11 +51,12 @@ class RelExtractor:
         else:
             raise TypeError('Target must be a string, a Keyword class object, a list of strings or a list of Keyword class objects')
 
-        if (len(source) == len(target)):
-            self.relations = [Relation(source[i],target[i],self.rel_extractor.compute_relation(source[i].text, target[i].text)) for i in range(len(source))]
-        elif (len(source)==1):
-            self.relations = [Relation(source[0],target[i],self.rel_extractor.compute_relation(source[0].text, target[i].text)) for i in range(len(target))]
-        elif (len(target)==1):
-            self.relations = [Relation(source[i],target[0],self.rel_extractor.compute_relation(source[i].text, target[0].text)) for i in range(len(source))]
+        if self.all_combinations:
+            self.relations = []
+            for i in range(len(source)):
+                self.relations.extend([Relation(source[i],target[j],self.rel_extractor.compute_relation(source[i].text, target[j].text)) for j in range(len(target))])
         else:
-            raise TypeError('Source and target must be the same length or at least one of them has to be length 1.')
+            if (len(source) == len(target)):
+                self.relations = [Relation(source[i],target[i],self.rel_extractor.compute_relation(source[i].text, target[i].text)) for i in range(len(source))]
+            else:
+                raise TypeError('Source and target must be the same length when all_combinations=False.')
