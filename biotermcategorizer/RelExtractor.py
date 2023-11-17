@@ -8,7 +8,7 @@ class RelExtractor:
                  relation_method='transformers', 
                  language='spanish',
                  n=1,
-                 thr_transformers=0,
+                 thr_transformers=-1,
                  thr_setfit=0.5,
                  all_combinations=False,
                  model_path=None,
@@ -54,9 +54,9 @@ class RelExtractor:
         if self.all_combinations:
             self.relations = []
             for i in range(len(source)):
-                self.relations.extend([Relation(source[i],target[j],self.rel_extractor.compute_relation(source[i].text, target[j].text)) for j in range(len(target))])
+                self.relations.extend([Relation(source[i],target[j],self.rel_extractor.compute_relation(source[i].text, target[j].text), self.relation_method) for j in range(len(target))])
         else:
             if (len(source) == len(target)):
-                self.relations = [Relation(source[i],target[i],self.rel_extractor.compute_relation(source[i].text, target[i].text)) for i in range(len(source))]
+                self.relations = [Relation(source[i],target[i],self.rel_extractor.compute_relation(source[i].text, target[i].text), self.relation_method) for i in range(len(source))]
             else:
                 raise TypeError('Source and target must be the same length when all_combinations=False.')
