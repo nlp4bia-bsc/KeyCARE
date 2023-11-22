@@ -20,11 +20,14 @@ class TransformersRelator(Relator):
         return model
 
     def compute_relation(self, source, target):
+        final_labels = list()
         tokenized_mention = self.tokenizer(source, target, return_tensors='pt', padding=True, truncation=True)
         with torch.no_grad():
             output = self.model(**tokenized_mention)
         logits = output.logits
-        predscores = {label: score for label, score in zip(self.labels, logits.tolist()[0])}
-        top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
-        filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
-        return filtered_labels
+        for i in range(len(logits.tolist())):
+            predscores = {label: score for label, score in zip(self.labels, logits.tolist()[i])}
+            top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
+            filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
+            final_labels.append(filtered_labels)
+        return final_labels
