@@ -14,10 +14,15 @@ class SetFitRelator(Relator):
         return model
 
     def compute_relation(self, source, target):
-        mention = source + " </s> " + target
-        embeddings = self.model.model_body.encode([mention], normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
+        final_labels = list()
+        mentions = list()
+        for i in range(len(source)):
+            mentions.append(source[i].text + " </s> " + target[i].text)
+        embeddings = self.model.model_body.encode(mentions, normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
         predicts = self.model.model_head.predict_proba(embeddings)
-        predscores = {self.labels[i]: arr[:,1].tolist()[0] for i, arr in enumerate(predicts)}
-        top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
-        filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
-        return filtered_labels
+        for j in range(len(predicts[0])):
+            predscores = {self.labels[i]: arr[:,1].tolist()[j] for i, arr in enumerate(predicts)}
+            top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
+            filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
+            final_labels.append(filtered_labels)
+        return final_labels

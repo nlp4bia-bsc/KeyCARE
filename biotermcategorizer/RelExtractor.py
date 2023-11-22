@@ -52,11 +52,14 @@ class RelExtractor:
             raise TypeError('Target must be a string, a Keyword class object, a list of strings or a list of Keyword class objects')
 
         if self.all_combinations:
-            self.relations = []
-            for i in range(len(source)):
-                self.relations.extend([Relation(source[i],target[j],self.rel_extractor.compute_relation(source[i].text, target[j].text), self.relation_method) for j in range(len(target))])
+            target_rep = target*len(source)
+            source_rep_list = [[i]*len(target) for i in source]
+            source_rep = [i for items in source_rep_list for i in items]
+            relations = self.rel_extractor.compute_relation(source_rep, target_rep)
+            self.relations = [Relation(source_rep[i],target_rep[i],relations[i], self.relation_method) for i in range(len(source_rep))]
         else:
             if (len(source) == len(target)):
-                self.relations = [Relation(source[i],target[i],self.rel_extractor.compute_relation(source[i].text, target[i].text), self.relation_method) for i in range(len(source))]
+                relations = self.rel_extractor.compute_relation(source, target)
+                self.relations = [Relation(source[i],target[i],relations[i], self.relation_method) for i in range(len(source))]
             else:
                 raise TypeError('Source and target must be the same length when all_combinations=False.')

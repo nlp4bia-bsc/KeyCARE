@@ -9,6 +9,7 @@ import evaluate
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_score, recall_score, f1_score, precision_recall_fscore_support, confusion_matrix, classification_report
 from collections import Counter
+import sys
 
 path='/gpfs/scratch/bsc14/bsc14515/jup_lab/data/traindata_relations.tsv'
 traindata = pd.read_csv(path, sep='\t')
@@ -24,12 +25,13 @@ testdata_nocategory = pd.read_csv(path, sep='\t')
 traindata_nocategory["source_target"]=traindata_nocategory["source"] + " </s> " + traindata_nocategory["target"]
 testdata_nocategory["source_target"]=testdata_nocategory["source"] + " </s> " + testdata_nocategory["target"]
 
-traindata_narrow = traindata[traindata["rel_type"]=="NARROW"].head(25000)
-traindata_broad = traindata[traindata["rel_type"]=="BROAD"].head(25000)
-traindata_exact = traindata[traindata["rel_type"]=="EXACT"].head(12500)
-traindata_nocat = traindata_nocategory.head(37500)
+#como argumentos la cantidad de cada clase y del test
+traindata_broad = traindata[traindata["rel_type"]=="BROAD"].head(sys.argv[1])
+traindata_exact = traindata[traindata["rel_type"]=="EXACT"].head(sys.argv[2])
+traindata_narrow = traindata[traindata["rel_type"]=="NARROW"].head(sys.argv[3])
+traindata_nocat = traindata_nocategory.head(sys.argv[4])
 traindata_head = pd.concat([traindata_narrow,traindata_broad,traindata_exact,traindata_nocat], axis=0)
-testdata_head = pd.concat([testdata.head(22500),testdata_nocategory.head(10000)], axis=0)
+testdata_head = pd.concat([testdata.head(sys.argv[5]),testdata_nocategory.head(sys.argv[6])], axis=0)
 
 trainX1 = traindata_head["source"].values.tolist()
 trainX2 = traindata_head["target"].values.tolist()
@@ -76,23 +78,25 @@ def collate_fn(batch):
 trainer = Trainer(
     model=model,
     args=training_args,
-    data_collator=collate_fn,  # You can customize data collation if needed
+    data_collator=collate_fn,
     train_dataset=dataset,
     eval_dataset=dataset2,
 )
 
 trainer.train()
-model.save_pretrained('/gpfs/scratch/bsc14/bsc14515/jup_lab/models/trained/transformers_trained_model')
+#guardamos con el nombre especificado en los args
+model.save_pretrained('/gpfs/scratch/bsc14/bsc14515/jup_lab/models/trained/' + sys.argv[7])
 results = trainer.predict(dataset2)
 
 max_indices = np.argmax(results.predictions, axis=1)
 preds = np.zeros_like(results.predictions)
 preds[np.arange(len(max_indices)), max_indices] = 1
 
-with open('predictions.txt', 'w') as file:
+#no se del todo como guardar los resultados predichos? o esto no lo hago aqui?
+with open('/gpfs/scratch/bsc14/bsc14515/jup_lab/predictions.txt', 'w') as file:
     file.write(preds)
 
-f1 = f1_score(preds, results.label_ids, average="micro")  # You can choose other average options as needed
+f1 = f1_score(preds, results.label_ids, average="micro")  
 accuracy = accuracy_score(preds, results.label_ids)
 
 def mcm_heatmap(y_pred, y_test):
@@ -101,15 +105,14 @@ def mcm_heatmap(y_pred, y_test):
     
     samples_with_predictions = np.any(y_pred, axis=1)
 
-    # Filter y_pred and y_test to include only samples with predictions
     y_pred_with_predictions = y_pred[samples_with_predictions]
     y_test_with_predictions = y_test[samples_with_predictions]
 
-    # Initialize the confusion matrix
     confusion_matrix_multi = confusion_matrix(y_test_with_predictions.argmax(axis=1), y_pred_with_predictions.argmax(axis=1), labels=np.arange(4))
     return confusion_matrix_multi
 
-with open('evaluation.txt', 'w') as file:
+#tampoco se si hacer la evaluation aqui
+with open('/gpfs/scratch/bsc14/bsc14515/jup_lab/evaluation.txt', 'w') as file:
     file.write("F1-score:", f1)
     file.write("Accuracy:", accuracy)
     file.write(classification_report(results.label_ids, preds, target_names=['BROAD','EXACT','NARROW','NO_RELATION']))
