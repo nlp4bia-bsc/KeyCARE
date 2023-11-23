@@ -21,6 +21,8 @@ class TransformersRelator(Relator):
 
     def compute_relation(self, source, target):
         final_labels = list()
+        print(type(source),source)
+        print(type(target), target)
         tokenized_mention = self.tokenizer(source, target, return_tensors='pt', padding=True, truncation=True)
         with torch.no_grad():
             output = self.model(**tokenized_mention)
