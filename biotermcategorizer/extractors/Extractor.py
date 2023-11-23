@@ -122,7 +122,7 @@ class Extractor:
         Returns:
         list: List of terms with non-alphanumeric characters removed.
         """
-        new_terms = [t if t.isalnum() for t in terms]
+        new_terms = [t for t in terms if t.isalnum()]
         new_terms = [(t[0][1:], t[1] + 1, t[2], t[3], t[4]) if not t[0][0].isalnum() else t for t in new_terms]
         new_terms = [(t[0][:-1], t[1], t[2] - 1, t[3], t[4]) if not t[0][-1].isalnum() else t for t in new_terms]
         return new_terms
