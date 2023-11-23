@@ -16,8 +16,6 @@ class SetFitRelator(Relator):
     def compute_relation(self, source, target):
         final_labels = list()
         mentions = list()
-        print(type(source),source)
-        print(type(target), target)
         for i in range(len(source)):
             mentions.append(source[i].text + " </s> " + target[i].text)
         embeddings = self.model.model_body.encode(mentions, normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
