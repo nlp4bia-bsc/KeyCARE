@@ -23,7 +23,7 @@ class TransformersRelator(Relator):
         final_labels = list()
         source_text = [s.text for s in source]
         target_text = [t.text for t in target]
-        tokenized_mention = self.tokenizer(source, target, return_tensors='pt', padding=True, truncation=True)
+        tokenized_mention = self.tokenizer(source_text, target_text, return_tensors='pt', padding=True, truncation=True)
         with torch.no_grad():
             output = self.model(**tokenized_mention)
         logits = output.logits
