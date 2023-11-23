@@ -1,3 +1,4 @@
+from itertools import product
 from utils.data_structures import Relation
 from utils.data_structures import Keyword
 from relators.SetFitRelator import SetFitRelator
@@ -52,9 +53,8 @@ class RelExtractor:
             raise TypeError('Target must be a string, a Keyword class object, a list of strings or a list of Keyword class objects')
 
         if self.all_combinations:
-            target_rep = target*len(source)
-            source_rep_list = [[i]*len(target) for i in source]
-            source_rep = [i for items in source_rep_list for i in items]
+            source_rep = [i for i,j in list(product(source, target))]
+            target_rep = [j for i,j in list(product(source, target))]
             relations = self.rel_extractor.compute_relation(source_rep, target_rep)
             self.relations = [Relation(source_rep[i],target_rep[i],relations[i], self.relation_method) for i in range(len(source_rep))]
         else:
