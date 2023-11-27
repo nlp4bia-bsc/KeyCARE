@@ -66,5 +66,4 @@ trainer = Trainer(
 )
 
 trainer.train()
-#guardamos con el nombre especificado en los args
 model.save_pretrained(sys.argv[5])

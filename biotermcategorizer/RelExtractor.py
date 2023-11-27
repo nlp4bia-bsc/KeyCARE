@@ -14,11 +14,37 @@ class RelExtractor:
                  all_combinations=False,
                  model_path=None,
                 ):
+        """
+        Initializes the RelExtractor class.
+
+        Parameters:
+        relation_method (str): Method used for relation extraction.
+        language (str): Language for text processing.
+        n (int): Maximum number of labels for a single relation.
+        thr_setfit (float): Threshold for SetFit relation classification.
+        thr_transformers (float): Threshold for Transformers relation classification.
+        all_combinations (bool): Whether to create relations for all combinations of source and target.
+        model_path (str): Path to the model if required.
+
+        """
         self.relation_method=relation_method
         self.all_combinations = all_combinations
         self.rel_extractor = self.initialize_relation_method(language, n, thr_transformers, thr_setfit, model_path)
         
     def initialize_relation_method(self, language, n, thr_transformers, thr_setfit, model_path):
+        """
+        Initializes the selected relation extraction method.
+
+        Parameters:
+        language (str): Language for text processing.
+        n (int): Maximum number of labels for a single relation.
+        thr_setfit (float): Threshold for SetFit relation classification.
+        thr_transformers (float): Threshold for Transformers relation classification.
+        model_path (str): Path to the model if required.
+
+        Returns:
+        object: Instance of the selected relation extraction method.
+        """
         if 'transformers' == self.relation_method:
             rel_extractor = TransformersRelator(n, thr_transformers, model_path)
         elif 'setfit' == self.relation_method:
@@ -28,6 +54,19 @@ class RelExtractor:
         return rel_extractor
     
     def __call__(self, source, target):
+        """
+        Executes the relation extraction based on the source and target inputs.
+
+        Parameters:
+        source (str/Keyword/list): Source for relation extraction.
+        target (str/Keyword/list): Target for relation extraction.
+
+        Raises:
+        TypeError: If source or target are not of expected types or lengths.
+
+        Returns:
+        list: List of Relation objects based on the extraction.
+        """
         if (type(source)==Keyword):
             source = [source]
         elif (type(source)==str):

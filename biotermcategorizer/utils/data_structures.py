@@ -31,10 +31,25 @@ class Keyword:
 
 class Relation:
     def __init__(self, source, target, rel_type, relation_method):
+        """
+        Initializes the Relation class.
+
+        Parameters:
+        source (Keyword): Source mention for the relation.
+        target (Keyword): Target mention for the relation.
+        rel_type (str): Type of relation.
+        relation_method (str): Method used to compute the relation.
+        """
         self.source = source
         self.target = target
         self.rel_type = rel_type
         self.relation_method = relation_method
 
     def __repr__(self):
+        """
+        String representation of Relation object.
+
+        Returns:
+        str: Representation of the Relation object.
+        """
         return f"<Relation(source mention='{self.source.text}', target mention='{self.target.text}', relation type='{self.rel_type}', relation method='{self.relation_method}')>"

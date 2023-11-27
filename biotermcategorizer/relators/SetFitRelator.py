@@ -3,9 +3,26 @@ from .Relator import Relator
 
 class SetFitRelator(Relator):
     def __init__(self, n, threshold, model_path):
+        """
+        Initializes SetFitRelator, a class inheriting from Relator.
+
+        Parameters:
+        n (int): Maximum number of labels for a single relation.
+        threshold (float): Threshold value for mentions relation.
+        model_path (str): Path to the model.
+        """
         super().__init__(n, threshold, model_path)
     
     def initialize_pretrained_model(self, model_path):
+        """
+        Initializes a pretrained SetFitModel based on the provided model_path.
+
+        Parameters:
+        model_path (str): Path to the pretrained model.
+
+        Returns:
+        object: SetFitModel instance.
+        """
         if model_path is None:
             path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/setfit_rel1'
             model = SetFitModel.from_pretrained(path)
@@ -14,6 +31,16 @@ class SetFitRelator(Relator):
         return model
 
     def compute_relation(self, source, target):
+        """
+        Computes relations between source and target entities.
+
+        Parameters:
+        source (list): List of source entities.
+        target (list): List of target entities.
+
+        Returns:
+        list: List of labels representing computed relations.
+        """
         final_labels = list()
         mentions = list()
         for i in range(len(source)):
