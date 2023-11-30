@@ -10,5 +10,5 @@ class Relator:
         """
         self.n = n
         self.threshold = threshold
-        self.labels = ['BROAD','EXACT','NARROW']
+        self.labels = ['BROAD','EXACT','NARROW','NO_CATEGORY']
         self.model = self.initialize_pretrained_model(model_path)
