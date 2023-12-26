@@ -175,10 +175,15 @@ class TermExtractor:
                 for kw in self.keywords:
                     kw.label = clusters[kw.text]
                     kw.categorization_method = self.categorization_method
+            # else:
+            #     for kw in self.keywords:
+            #         kw.label = self.categorizer.compute_predictions(kw.text)
+            #         kw.categorization_method = self.categorization_method
             else:
-                for kw in self.keywords:
-                    kw.label = self.categorizer.compute_predictions(kw.text)
-                    kw.categorization_method = self.categorization_method
+                labels = self.categorizer.compute_predictions(self.keywords)
+                for i in len(self.keywords):
+                    self.keywords[i].label = labels[i]
+                    self.keywords[i].categorization_method = self.categorization_method
         except:
             raise AttributeError("A categorizer method must be provided")
 

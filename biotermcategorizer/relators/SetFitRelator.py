@@ -24,7 +24,7 @@ class SetFitRelator(Relator):
         object: SetFitModel instance.
         """
         if model_path is None:
-            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/setfit_rel1'
+            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/setfit_rel1_B'
             model = SetFitModel.from_pretrained(path)
         else:
             model = SetFitModel.from_pretrained(model_path)
