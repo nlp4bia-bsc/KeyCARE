@@ -30,7 +30,7 @@ class TransformersRelator(Relator):
         path = '/mnt/c/Users/Sergi/Desktop/BSC/spanish_sapbert_models/sapbert_15_noparents_1epoch'
         self.tokenizer = AutoTokenizer.from_pretrained(path)
         if model_path is None:
-            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/transformers_rel1'        
+            path = '/mnt/c/Users/Sergi/Desktop/BSC/modelos_entrenados/transformers_rel1_B'        
             model = AutoModelForSequenceClassification.from_pretrained(path)
         else:
             model = AutoModelForSequenceClassification.from_pretrained(model_path)

@@ -42,22 +42,34 @@ class TransformersClassifier(Categorizer):
 
     def compute_predictions(self, mention):
         """
-        Computes label predictions for a given mention.
+        Computes label predictions for a list of given mentions.
 
         Parameters:
-        mention (str): The input mention for prediction.
+        mention (list): List of input mentions for prediction.
 
         Returns:
-        list: List of filtered labels considering the given threshold and the maximum labels.
+        list: List of lists of filtered labels considering the given threshold and the maximum labels.
         """
-        tokenized_mention = self.tokenizer(mention, return_tensors='pt', padding=True, truncation=True)
+        final_labels = list()
+        mention_text = [m.text for m in mention]
+        tokenized_mention = self.tokenizer(mention_text, return_tensors='pt', padding=True, truncation=True)
         with torch.no_grad():
             output = self.model(**tokenized_mention)
         logits = output.logits
-        predscores = {label: score for label, score in zip(self.labels, logits.tolist()[0])}
-        top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
-        filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
-        return filtered_labels
+        for i in range(len(logits.tolist())):
+            predscores = {label: score for label, score in zip(self.labels, logits.tolist()[i])}
+            top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
+            filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
+            final_labels.append(filtered_labels)
+        return final_labels
+        # tokenized_mention = self.tokenizer(mention, return_tensors='pt', padding=True, truncation=True)
+        # with torch.no_grad():
+        #     output = self.model(**tokenized_mention)
+        # logits = output.logits
+        # predscores = {label: score for label, score in zip(self.labels, logits.tolist()[0])}
+        # top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
+        # filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
+        # return filtered_labels
     
     def initialize_model_body(self, trainY):
         """

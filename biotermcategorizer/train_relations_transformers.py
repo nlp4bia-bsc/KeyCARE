@@ -10,7 +10,7 @@ import sys
 # 1 - traindata path: '/gpfs/scratch/bsc14/bsc14515/jup_lab/data/traindata.tsv'
 # 2 - evaldata path: '/gpfs/scratch/bsc14/bsc14515/jup_lab/data/testdata.tsv'
 # 3 - base model path: '/gpfs/scratch/bsc14/bsc14515/jup_lab/models/base/sapbert_15_noparents_1epoch.tsv'
-# 4 - batch size path: 32
+# 4 - batch size path: 64
 # 5 - output_dir path: '/gpfs/scratch/bsc14/bsc14515/jup_lab/models/trained/NOMBRE_MODELO'
 
 traindata = pd.read_csv(sys.argv[1], sep='\t')
@@ -42,8 +42,8 @@ test_dataset = TensorDataset(tokenized_data.input_ids, tokenized_data.attention_
 
 training_args = TrainingArguments(
     output_dir="./output",  # Output directory
-    num_train_epochs=3,     # Number of training epochs
-    per_device_train_batch_size=sys.argv[4],  # Batch size per device
+    num_train_epochs=2,     # Number of training epochs
+    per_device_train_batch_size=int(sys.argv[4]),  # Batch size per device
     evaluation_strategy="steps",  # Evaluate every steps
     save_steps=500,  # Save checkpoint every 500 steps
     save_total_limit=2,  # Only keep the last 2 checkpoints
