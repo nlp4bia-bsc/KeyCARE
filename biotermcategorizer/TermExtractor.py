@@ -181,7 +181,7 @@ class TermExtractor:
             #         kw.categorization_method = self.categorization_method
             else:
                 labels = self.categorizer.compute_predictions(self.keywords)
-                for i in len(self.keywords):
+                for i in range(len(self.keywords)):
                     self.keywords[i].label = labels[i]
                     self.keywords[i].categorization_method = self.categorization_method
         except:
