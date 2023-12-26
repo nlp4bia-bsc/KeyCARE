@@ -38,13 +38,13 @@ class SetFitClassifier(Categorizer):
 
     def compute_predictions(self, mention):
         """
-        Computes label predictions for a given mention.
+        Computes label predictions for a list of given mentions.
 
         Parameters:
-        mention (str): The input mention for prediction.
+        mention (list): List of input mentions for prediction.
 
         Returns:
-        list: List of filtered labels considering the given threshold and the maximum labels.
+        list: List of lists of filtered labels considering the given threshold and the maximum labels.
         """
         final_labels = list()
         mention_text = [m.text for m in mention]
