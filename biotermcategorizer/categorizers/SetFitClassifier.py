@@ -56,14 +56,13 @@ class SetFitClassifier(Categorizer):
             filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
             final_labels.append(filtered_labels)
         return final_labels
-        # embeddings = self.model.model_body.encode([mention], normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
-        # predicts = self.model.model_head.predict_proba(embeddings)
-        # predscores = {self.labels[i]: arr[:,1].tolist()[0] for i, arr in enumerate(predicts)}
-        # top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
-        # filtered_labels = [label for label in top_n_labels if predscores[label] > self.threshold]
-        # return filtered_labels
 
     def initialize_model_body(self, trainY):
+        """
+        Initializes the model body from the given base model.
+
+        Parameters: trainY
+        """
         self.model = SetFitModel.from_pretrained(self.classifier_model, multi_target_strategy="multi-output")
 
     def train_evaluate(self, trainX, trainY, testX, testY, mcm, classification_report, **kwargs):
@@ -89,7 +88,13 @@ class SetFitClassifier(Categorizer):
             if param in kwargs:
                 del kwargs[param]
                 print("Warning. The parameter " + param + " cannot be changed from its given value.")
-        trainer = SetFitTrainer(model=self.model, train_dataset=train_dataset, eval_dataset=test_dataset, metric=evaluate_with_params, num_iterations=5, **kwargs)
+        trainer = SetFitTrainer(model=self.model, 
+            train_dataset=train_dataset, 
+            eval_dataset=test_dataset, 
+            metric=evaluate_with_params, 
+            num_iterations=5, 
+            **kwargs,
+        )
         trainer.train()
         metrics = trainer.evaluate()
         self.model.save_pretrained(self.output_path)
