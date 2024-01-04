@@ -17,7 +17,7 @@ class TermExtractor:
                  language="spanish", 
                  max_tokens=3, 
                  pos=False,
-                 pos_pattern="<NOUN.*>*<ADP.*>*<NOUN.*>*<ADJ.*>*|<PROPN.*>+|<VERB.*>+", #CANVIAR PER EL BO DE VERITAT
+                 pos_pattern="<NOUN.*>*<ADP.*>*<NOUN.*>*<ADJ.*>*|<PROPN.*>+|<VERB.*>+", #CANVIAR PEL MILLOR NO?
                  join=False, 
                  postprocess=True,
                  n=1, 
@@ -175,10 +175,6 @@ class TermExtractor:
                 for kw in self.keywords:
                     kw.label = clusters[kw.text]
                     kw.categorization_method = self.categorization_method
-            # else:
-            #     for kw in self.keywords:
-            #         kw.label = self.categorizer.compute_predictions(kw.text)
-            #         kw.categorization_method = self.categorization_method
             else:
                 labels = self.categorizer.compute_predictions(self.keywords)
                 for i in range(len(self.keywords)):
