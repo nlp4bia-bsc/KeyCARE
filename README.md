@@ -22,125 +22,117 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 -->
 <!-- PROJECT LOGO -->
-#  BioTermCategorizer <img src="www/no_logo.png" alt="Logo" align="right"  width="200" height="200">
+# KeyCARE <img src="www/keyCARE_smalllogo.png" alt="Logo" align="right" width="50%">
 
-Biomedical term extraction and classification.
+A python library for biomedical keyword extraction, term categorization, and semantic relation
+
 <p align="left">
-    TO BE DEFINED
     <br />
-    <a href="https://github.com/nlp4bia-bsc/BioTermCategorizer"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/nlp4bia-bsc/keycare"><strong>Explore the docs »</strong></a>
 </p>
 <p align="center">
-    <a href="https://github.com/nlp4bia-bsc/BioTermCategorizer/issues">Report Bug</a>
+    <a href="https://github.com/nlp4bia-bsc/keycare/issues">Report Bug</a>
     ·
-    <a href="https://github.com/nlp4bia-bsc/BioTermCategorizer/issues">Request Feature</a>
+    <a href="https://github.com/nlp4bia-bsc/keycare/issues">Request Feature</a>
 </p>
 
 <!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#example">Example</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-  </ol>
-</details>
+<a name="toc"/></a>
+## Table of Contents  
+   1. [About the Project](#about)  
+   2. [Getting Started](#gettingstarted)  
+        2.1. [Installation](#installation)  
+        2.2. [Usage](#usage)  
+   3. [Contributing](#contributing)  
+   4. [License](#license)
+   5. [References](#references)
+
 <!-- ABOUT THE PROJECT -->
 
+<a name="about"/></a>
+## 1. About The Project
+[Back to ToC](#toc)
+KeyBERT provides a common interface for extracting, categorizing and associating terms extracted from a text: 
 
-## About The Project
-TO BE DEFINED
+1. **Keywords extraction**: KeyCARE implements several unsupervised term extraction techniques such as [*YAKE*](https://github.com/LIAAD/yake), [*RAKE*](https://pypi.org/project/rake-nltk/), [*TextRank*](https://pypi.org/project/pytextrank/) or [*KeyBERT*](https://github.com/MaartenGr/KeyBERT) to automatically extract key terms from a text.
+2. **Term categorization**: KeyCARE allows the application of term clustering techniques to group similar terms, as well as the training and application of supervised techniques to classify keywords into predefined categories. 
+3. **Semantic relation classification**: Beyond the identification and categorization of terms, the library supports the use of neural classification models to extract the semantic relation between two terms by means of EXACT, BROAD, NARROW and NO_relation relationships, which allows interconnecting the extracted terms and can be used for terminological enrichment, among other tasks.
 
 <!-- GETTING STARTED -->
-## Getting Started
+<a name="gettingstarted"/></a>
+## 2. Getting Started
+[Back to ToC](#toc)
 
-This script has been developed with Python 3.8.2
+<a name="installation"/></a>
+### 2.1. Installation 
+Installation can be done using pypi:
 
-### Installation
+```sh
+   pip install keybert
+```
 
-1. Clone the repo
+<a name="usage"/></a>
+### 2.2. Usage 
+La librería se construye sobre X objetos principales:
 
+
+
+#### Term Extraction
+
+
+#### Term Categorization
+
+
+#### Relation Extraction
+
+
+<!-- CONTRIBUTING -->
+<a name="contributing"/></a>
+## 3. Contributing
+[Back to ToC](#toc)
+
+This library has been developed with Python 3.8.2
+
+Any contributions you make are **greatly appreciated**. For contributing:
+
+1. Fork/Clone the Project in your system
    ```sh
-   git clone https://github.com/nlp4bia-bsc/BioTermCategorizer.git
+   git clone https://github.com/nlp4bia-bsc/keycare.git
    ```
-
 2. Create a new virtual environment
 
    ```sh
-   python3 -m venv .env_biotermcategorizer
+   python3 -m venv .env_keycare
    ```
-
 3. Activate the new environment
 
    ```sh
-   source .env_biotermcategorizer/bin/activate
+   source .env_keycare/bin/activate
    ```
-
 4. Install the requirements
 
     ```sh
     pip install -r requirements.txt
     ```
-
-<!-- USAGE EXAMPLES -->
-## Usage
-### Info.
-La librería se construye sobre X objetos principales:
-
-### Example
-TBD 
-
-<!-- ROADMAP -->
-## Roadmap
-* [ ]  
-* [ ] 
-* [ ] 
-<!-- CONTRIBUTING -->
-## Contributing
-
-Any contributions you make are **greatly appreciated**. For contributing:
-
-1. Fork/Clone the Project in your system
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Update requirements file (`pip freeze > requirements.txt`)
-4. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-5. Push to the Branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request from github.
-7. Check that the evaluation workflow from github is executed without errors.
-8. Notify to @luisgasco to test and accept the new changes.
+5. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+6. Update requirements file (`pip freeze > requirements.txt`)
+7. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+8. Push to the Branch (`git push origin feature/AmazingFeature`)
+9. Open a Pull Request from github.
 
 Follow [this tutorial](https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches) to create a branch.
 
 <!-- LICENSE -->
-## License
+<a name="license"/></a>
+## 4. License
+[Back to ToC](#toc)
 
+[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
------
-> [luisgasco.es](http://luisgasco.es/) · GitHub:
-> [@luisgasco](https://github.com/luisgasco) · Twitter:
-> [@luisgasco](https://twitter.com/luisgasco) · Facebook: [Luis Gascó
-> Sánchez
-> page](https://www.facebook.com/Luis-Gasco-Sanchez-165003227504667)
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+<a name="references"/></a>
+## 5. References
+[Back to ToC](#toc)
+
+Please cite if you use the library in scientific works: 
+
+> PAPER TO BE PUBLISHED
