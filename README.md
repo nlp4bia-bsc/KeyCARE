@@ -52,11 +52,12 @@ A python library for biomedical keyword extraction, term categorization, and sem
 <a name="about"/></a>
 ## 1. About The Project
 [Back to ToC](#toc)
+
 KeyBERT provides a common interface for extracting, categorizing and associating terms extracted from a text: 
 
 1. **Keywords extraction**: KeyCARE implements several unsupervised term extraction techniques such as [*YAKE*](https://github.com/LIAAD/yake), [*RAKE*](https://pypi.org/project/rake-nltk/), [*TextRank*](https://pypi.org/project/pytextrank/) or [*KeyBERT*](https://github.com/MaartenGr/KeyBERT) to automatically extract key terms from a text.
-2. **Term categorization**: KeyCARE allows the application of term clustering techniques to group similar terms, as well as the training and application of supervised techniques to classify keywords into predefined categories, including [SetFit]. 
-3. **Semantic relation classification**: Beyond the identification and categorization of terms, the library supports the use of neural classification models to extract the semantic relation between two terms by means of EXACT, BROAD, NARROW and NO_relation relationships, which allows interconnecting the extracted terms and can be used for terminological enrichment, among other tasks.
+2. **Term categorization**: KeyCARE allows the application of term clustering techniques to group similar terms, as well as the training and application of supervised techniques to classify keywords into predefined categories, including [SetFit](https://github.com/huggingface/setfit). 
+3. **Semantic relation classification**: Beyond the identification and categorization of terms, the library supports the use of neural classification models, such as the [Transformer's AutoModelForSequenceClassification](https://github.com/huggingface/transformers), to extract the semantic relation between two terms by means of EXACT, BROAD, NARROW and NO_RELATION relationships, which allows interconnecting the extracted terms and can be used for terminological enrichment, among other tasks.
 
 <!-- GETTING STARTED -->
 <a name="gettingstarted"/></a>
@@ -73,24 +74,40 @@ Installation can be done using pypi:
 
 <a name="usage"/></a>
 ### 2.2. Usage 
-The library is built on 3 main processes:
+The library is built on 3 main processes: keyword extraction, term categorization and relations extraction. The two first processes have been implemented within a same pipeline in the class `TermExtractor`, which automatically extracts classified keywords frim pieces of text. The relations extraction process among term pairs or groups of terms is implemented in the other main class, `RelExtractor`.
 
-#### Term Extraction
-...
+#### TermExtractor
+For the use of TermExtractor with default parameters, use the following code:
 
-#### Term Categorization
+```sh
+   from keycare.TermExtractor import TermExtractor
+   extractor = TermExtractor()
+   extractor("...") # Introduce your text here
+   extractor.keywords
+```
 
+This code calls TermExtractor with default parameters on a piece of text and returns the extracted keywords with their assigned class.
 
-#### Relation Extraction
+#### RelExtractor
+For the use of RelExtractor with default parameters, use the following code:
 
-For further information on the functioning of the library refer to the tutorials in the nbs folder.
+```sh
+   from keycare.RelExtractor import RelExtractor
+   relextractor = RelExtractor()
+   relextractor("...", "...") # Introduce your term pairs here
+   relextractor.relations
+```
+
+This code calls RelExtractor with default parameters on pairs of terms and returns the existing relation among them.
+
+For further information on the functioning of the library and the available parameters refer to the tutorials in the nbs folder.
 
 <!-- CONTRIBUTING -->
 <a name="contributing"/></a>
 ## 3. Contributing
 [Back to ToC](#toc)
 
-This library has been developed with Python 3.8.2
+This library has been developed with Python 3.10.12
 
 Any contributions you make are **greatly appreciated**. For contributing:
 
@@ -132,6 +149,4 @@ Follow [this tutorial](https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-
 ## 5. References
 [Back to ToC](#toc)
 
-Please cite if you use the library in scientific works: 
-
-> PAPER TO BE PUBLISHED
+A paper on the library will soon be published. Please cite if you use the library in scientific works.
