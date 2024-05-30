@@ -12,7 +12,7 @@ exclude = ["tests*"]
 
 [project]
 name = "keycare"
-version = "0.0.14"
+version = "0.0.15"
 description = "KeyCARE is a Python library designed for the unsupervised keyword extraction from biomedical documents with the use of different algorithms, the classification of the keywords according to their semantic nature, and the extraction of is a relations among those keywords and with other terminologies."
 readme = "README.md"
 authors = [{ name = "Sergi Marsol", email = "sergimarsolt@gmail.com" }]
@@ -40,6 +40,7 @@ dependencies = [
     "torch==2.0.1",
     "transformers==4.33.0",
     "yake==0.4.8",
+    "es-core-news-sm",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

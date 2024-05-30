@@ -19,4 +19,4 @@ tokenizers==0.13.3
 torch==2.0.1
 transformers==4.33.0
 yake==0.4.8
-es-core-news-sm
+es-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.0.0/es_core_news_sm-3.0.0.tar.gz"
