@@ -1,0 +1,57 @@
+[build-system]
+requires = [
+    "setuptools>=69.0",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["keycare*"]
+exclude = ["tests*"]
+
+[project]
+name = "keycare"
+<<<<<<< HEAD
+version = "0.0.14"
+=======
+version = "0.0.6"
+>>>>>>> parent of 4dfe8e6 (Update)
+description = "KeyCARE is a Python library designed for the unsupervised keyword extraction from biomedical documents with the use of different algorithms, the classification of the keywords according to their semantic nature, and the extraction of is a relations among those keywords and with other terminologies."
+readme = "README.md"
+authors = [{ name = "Sergi Marsol", email = "sergimarsolt@gmail.com" }]
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+dependencies = [
+    "datasets==2.14.4",
+    "evaluate==0.4.0",
+    "huggingface-hub==0.16.4",
+    "keybert==0.7.0",
+    "keyphrase-vectorizers==0.0.11",
+    "matplotlib==3.7.2",
+    "nltk==3.8.1",
+    "numpy==1.25.2",
+    "pandas==2.0.3",
+    "pickleshare==0.7.5",
+    "pytextrank==3.2.5",
+    "rake-nltk==1.0.6",
+    "scikit-learn==1.2.2",
+    "scipy==1.11.1",
+    "sentence-transformers==2.2.2",
+    "setfit==0.7.0",
+    "spacy==3.6.1",
+    "tokenizers==0.13.3",
+    "torch==2.0.1",
+    "transformers==4.33.0",
+    "yake==0.4.8",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/nlp4bia-bsc/KeyCARE"
+Documentation = "https://github.com/nlp4bia-bsc/KeyCARE/docs"
+Repository = "https://github.com/nlp4bia-bsc/KeyCARE"
+Issues = "https://github.com/nlp4bia-bsc/KeyCARE/issues"

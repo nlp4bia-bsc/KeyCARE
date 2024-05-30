@@ -7,8 +7,8 @@ __pycache__/
 *.so
 
 # personal files
-.env_biotermcategorizer
-.env_biotermcategorizer/
+.env_keycare
+.env_keycare/
 .env
 .vscode
 .secrets
