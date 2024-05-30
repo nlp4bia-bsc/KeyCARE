@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 # KeyCARE <img src="www/keyCARE_smalllogo.png" alt="Logo" align="right" width="50%">
 
-A framework for biomedical keyword extraction, term categorization, and semantic relation.
+A framework for biomedical Keyword Extraction, term Categorization, and semantic Relation.
 
 <p align="left">
     <br />
