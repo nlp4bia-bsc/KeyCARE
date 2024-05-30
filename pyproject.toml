@@ -12,11 +12,7 @@ exclude = ["tests*"]
 
 [project]
 name = "keycare"
-<<<<<<< HEAD
 version = "0.0.14"
-=======
-version = "0.0.6"
->>>>>>> parent of 4dfe8e6 (Update)
 description = "KeyCARE is a Python library designed for the unsupervised keyword extraction from biomedical documents with the use of different algorithms, the classification of the keywords according to their semantic nature, and the extraction of is a relations among those keywords and with other terminologies."
 readme = "README.md"
 authors = [{ name = "Sergi Marsol", email = "sergimarsolt@gmail.com" }]
