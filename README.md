@@ -72,6 +72,12 @@ Installation can be done using pypi:
    pip install keycare
 ```
 
+You might also need to install spacy's es_core_news_sm:
+
+```sh
+   python3 -m spacy download es_core_news_sm
+```
+
 <a name="usage"/></a>
 ### 2.2. Usage 
 The library is built on 3 main processes: keyword extraction, term categorization and relations extraction. The two first processes have been implemented within a same pipeline in the class `TermExtractor`, which automatically extracts classified keywords frim pieces of text. The relations extraction process among term pairs or groups of terms is implemented in the other main class, `RelExtractor`.
