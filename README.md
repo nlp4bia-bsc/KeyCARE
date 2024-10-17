@@ -53,7 +53,7 @@ A framework for biomedical Keyword Extraction, term Categorization, and semantic
 ## 1. About The Project
 [Back to ToC](#toc)
 
-KeyBERT provides a common interface for extracting, categorizing and associating terms extracted from a text: 
+KeyCARE provides a common interface for extracting, categorizing and associating terms extracted from a text: 
 
 1. **Keywords extraction**: KeyCARE implements several unsupervised term extraction techniques such as [*YAKE*](https://github.com/LIAAD/yake), [*RAKE*](https://pypi.org/project/rake-nltk/), [*TextRank*](https://pypi.org/project/pytextrank/) or [*KeyBERT*](https://github.com/MaartenGr/KeyBERT) to automatically extract key terms from a text.
 2. **Term categorization**: KeyCARE allows the application of term clustering techniques to group similar terms, as well as the training and application of supervised techniques to classify keywords into predefined categories, including [SetFit](https://github.com/huggingface/setfit). 
