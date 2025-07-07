@@ -46,7 +46,10 @@ class SetFitClassifier(Categorizer):
         final_labels = list()
         mention_text = [m.text for m in mention]
         embeddings = self.model.model_body.encode(mention_text, normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
-        predicts = self.model.model_head.predict_proba(embeddings)
+        if embeddings.is_cuda:
+            embeddings = embeddings.cpu()
+        predicts = self.model.model_head.predict_proba(embeddings.numpy())
+
         for j in range(len(predicts[0])):
             predscores = {self.labels[i]: arr[:,1].tolist()[j] for i, arr in enumerate(predicts)}
             top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]

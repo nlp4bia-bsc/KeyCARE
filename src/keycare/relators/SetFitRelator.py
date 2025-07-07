@@ -46,7 +46,10 @@ class SetFitRelator(Relator):
         for i in range(len(source)):
             mentions.append(source[i].text + " </s> " + target[i].text)
         embeddings = self.model.model_body.encode(mentions, normalize_embeddings=self.model.normalize_embeddings, convert_to_tensor=True)
-        predicts = self.model.model_head.predict_proba(embeddings)
+        if embeddings.is_cuda:
+            embeddings = embeddings.cpu()
+        predicts = self.model.model_head.predict_proba(embeddings.numpy())
+        
         for j in range(len(predicts[0])):
             predscores = {self.labels[i]: arr[:,1].tolist()[j] for i, arr in enumerate(predicts)}
             top_n_labels = sorted(predscores, key=predscores.get, reverse=True)[:self.n]
