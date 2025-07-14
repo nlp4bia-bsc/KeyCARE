@@ -108,6 +108,10 @@ This code calls RelExtractor with default parameters on pairs of terms and retur
 
 For further information on the functioning of the library and the available parameters refer to the tutorials in the nbs folder.
 
+You can also access the tutorials in Spanish at the following youtube links:
+- TermExtractor: [https://www.youtube.com/watch?v=xLLCjsbuV_U](https://youtu.be/xLLCjsbuV_U)
+- RelExtractor: [https://youtu.be/-kJJJSnYCCI](https://youtu.be/-kJJJSnYCCI)
+
 <!-- CONTRIBUTING -->
 <a name="contributing"/></a>
 ## 3. Contributing
